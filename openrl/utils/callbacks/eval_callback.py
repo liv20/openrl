@@ -90,6 +90,7 @@ class EvalCallback(EventCallback):
         n_eval_episodes: int = 5,
         eval_freq: int = 10000,
         log_path: Optional[Union[str, Path]] = None,
+        wandb_path: Optional[Union[str, Path]] = None,
         best_model_save_path: Optional[Union[str, Path]] = None,
         deterministic: bool = True,
         render: bool = False,
@@ -98,6 +99,7 @@ class EvalCallback(EventCallback):
         warn: bool = True,
         stop_logic: str = "OR",
         close_env_at_end: bool = True,
+    
     ):
         if isinstance(callbacks_after_eval, list):
             callbacks_after_eval = callbacks_factory.CallbackFactory.get_callbacks(
@@ -137,6 +139,7 @@ class EvalCallback(EventCallback):
         if log_path is not None:
             log_path = os.path.join(log_path, "evaluations")
         self.log_path = log_path
+        self.wandb_path = wandb_path
         self.evaluations_results = []
         self.evaluations_time_steps = []
         self.evaluations_length = []
@@ -229,20 +232,20 @@ class EvalCallback(EventCallback):
             )
             self.last_mean_reward = mean_reward
 
-            eval_info["Eval/episode_reward"] = mean_reward
-            eval_info["Eval/episode_reward_std"] = std_reward
-            eval_info["Eval/episode_length"] = mean_ep_length
-            eval_info["Eval/episode_length_std"] = std_ep_length
+            eval_info[f"{self.wandb_path}_episode_reward"] = mean_reward
+            eval_info[f"{self.wandb_path}_episode_reward_std"] = std_reward
+            eval_info[f"{self.wandb_path}_episode_length"] = mean_ep_length
+            eval_info[f"{self.wandb_path}_episode_length_std"] = std_ep_length
             if self.verbose >= 1:
                 print(
-                    f"Eval num_timesteps={self.num_time_steps}, "
+                    f"{self.wandb_path} num_timesteps={self.num_time_steps}, "
                     f"episode_reward={mean_reward:.2f} +/- {std_reward:.2f}"
                 )
                 print(f"Episode length: {mean_ep_length:.2f} +/- {std_ep_length:.2f}")
 
             if len(self._is_success_buffer) > 0:
                 success_rate = np.mean(self._is_success_buffer)
-                eval_info["Eval/success_rate"] = success_rate
+                eval_info[f"{self.wandb_path}_success_rate"] = success_rate
                 if self.verbose >= 1:
                     print(f"Success rate: {100 * success_rate:.2f}%")
 

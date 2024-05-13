@@ -7,8 +7,12 @@ from openrl.envs.mpe.scenario import BaseScenario
 
 
 class Scenario(BaseScenario):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.render_mode = None
+        if "collision_penalty" not in kwargs or kwargs['collision_penalty'] is None:
+            self.collision_penalty = 1
+        else:
+            self.collision_penalty = kwargs["collision_penalty"]
 
     def make_world(
         self,
@@ -100,7 +104,7 @@ class Scenario(BaseScenario):
         if agent.collide:
             for a in world.agents:
                 if self.is_collision(a, agent):
-                    rew -= 1
+                    rew -= self.collision_penalty
         return rew
 
     def observation(self, agent, world):

@@ -12,7 +12,7 @@ def make(
     **kwargs: Any,
 ) -> Env:
     # load scenario from script
-    scenario = load(id + ".py").Scenario()
+    scenario = load(id + ".py").Scenario(**kwargs)
     # create world
 
     world = scenario.make_world(render_mode=render_mode)
@@ -24,6 +24,7 @@ def make(
         scenario.observation,
         scenario.info,
         render_mode=render_mode,
+        **kwargs
     )
 
     return env

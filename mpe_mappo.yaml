@@ -1,0 +1,14 @@
+# https://openrl-docs.readthedocs.io/en/latest/quick_start/multi_agent_RL.html
+# python train_ppo.py --config mpe_ppo.yaml 
+wandb_entity: abl # This is used to specify the name of your own team.
+experiment_name: ppo # This is used to specify the experiment name.
+run_dir: ./exp_results/ # This is used to specify where experimental data will be saved.
+log_interval: 10 # This specifies how often (in terms of episodes) wandb should upload data during training.
+seed: 0 # Set seed for reproducible results across experiments.
+lr: 7e-4 # Set learning rate for policy model.
+critic_lr: 7e-4 # Set learning rate for critic model.
+episode_length: 25 # Set length of each episode.
+use_recurrent_policy: true # Whether recurrent policies should be used.
+use_joint_action_loss : true # Whether joint action loss should be used.
+use_valuenorm: true # Whether value normalization should be used.
+use_adv_normalize: true # Whether advantage normalization should be used.

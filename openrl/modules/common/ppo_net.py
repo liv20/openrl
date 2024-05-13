@@ -125,6 +125,7 @@ class PPONet(BaseNet):
             action_masks=action_masks,
             deterministic=deterministic,
         )
+        self.rnn_states_actor = self.rnn_states_actor.cpu().detach().numpy()
 
         return actions, self.rnn_states_actor
 

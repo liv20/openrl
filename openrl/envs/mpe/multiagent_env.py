@@ -37,6 +37,7 @@ class MultiAgentEnv(gym.Env):
         shared_viewer=True,
         discrete_action=True,
         render_mode=None,
+        **kwargs
     ):
         self.spec.id = world.name
         self.render_mode = render_mode
@@ -159,12 +160,21 @@ class MultiAgentEnv(gym.Env):
             self.viewers = [None] * self.n
         self._reset_render()
 
+        if 'random_action_prob' not in kwargs or kwargs['random_action_prob'] is None:
+            self.random_action_prob = 0.0
+        else:
+            self.random_action_prob = kwargs['random_action_prob']
+
     def seed(self, seed=None):
         if seed is not None:
             self._np_random, seed = seeding.np_random(seed)
 
     # step  this is  env.step()
     def step(self, action_n):
+        # delete action
+        no_action = np.random.uniform() < self.random_action_prob
+        action_n = np.where(no_action, np.random.randint(0, 5, size=action_n.shape), action_n)
+
         self.current_step += 1
         obs_n = []
         reward_n = []
