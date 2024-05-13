@@ -1,6 +1,6 @@
 """"""
 
-from train_ppo import evaluation, train
+from train_mappo import evaluation, train
 
 from openrl.modules.common import DQNNet as Net
 from openrl.runners.common import DQNAgent as Agent

@@ -1,6 +1,6 @@
 """"""
 
-from train_ppo import evaluation, train
+from train_mappo import evaluation, train
 
 from openrl.modules.common import DDPGNet as Net
 from openrl.runners.common import DDPGAgent as Agent
